@@ -19,7 +19,7 @@ labtainer centos-log2
 3. Khám phá thư mục log
    - Thay đổi thư mục làm việc hiện tại thành /var/log.
    - Liệt kê nội dung của /var/log.
-```bash
+```c
 drwxr-xr-x 2 root root   4096 Mar  2  2018 anaconda
 -rw------- 1 root utmp      0 Mar  8  2018 btmp
 -rw-r--r-- 1 root root    193 Mar  2  2018 grubby_prune_debug
@@ -43,7 +43,7 @@ drwxr-xr-x 2 root root   4096 Mar  2  2018 rhsm
    - Các bản ghi liên quan đến đăng nhập được lưu trong tệp văn bản có tên là secure. Các bản ghi mới nhất được ghi vào cuối tệp.
    - Mở tệp và tìm kiếm trạng thái failed khi cố gắng đăng nhập bằng tên người dùng Joe (không phải sự thất bại khi 'su' thành root).
    - Trong Mục số #2 của báo cáo, ghi lại cụm từ được sử dụng để chỉ ra sự thất bại trong việc đăng nhập.
-```bash
+```c
 Oct 24 03:04:06 logger login[1197]: pam_unix(login:auth): authentication failure; logname= uid=0 euid=0 tty=/dev/pts/2 ruser= rhost=
 Oct 24 03:04:08 logger login[1197]: FAILED LOGIN (1) on '/dev/pts/2' FOR 'UNKNOWN', Authentication failure
 ```
@@ -52,7 +52,7 @@ Oct 24 03:04:08 logger login[1197]: FAILED LOGIN (1) on '/dev/pts/2' FOR 'UNKNOW
 5. Mật khẩu là tên người dùng
    - Với tệp nhật ký secure vẫn mở, tìm dòng ghi chú cho biết sinh viên đã nhập "password" làm tên người dùng.
    - Trong Mục số #4 của báo cáo, ghi lại cụm từ được sử dụng khi bạn nhập một tên người dùng không hợp lệ.
-```bash
+```c
 Oct 24 03:04:13 logger login[1197]: pam_unix(login:auth): authentication failure; logname= uid=0 euid=0 tty=/dev/pts/2 ruser= rhost=  user=Joe
 Oct 24 03:04:14 logger login[1197]: FAILED LOGIN (2) on '/dev/pts/2' FOR 'Joe', Authentication failure
 ```
@@ -103,7 +103,7 @@ Khởi động lại tiến trình rsyslog sẽ khiến nó khởi tạo lại v
 Lệnh tail hiển thị một số dòng cuối cùng của tệp (khác với lệnh head, hiển thị một số dòng đầu tiên của tệp). Tùy chọn "-f" cho biết để chờ đợi “mãi mãi” và hiển thị thêm dòng khi chúng được thêm vào cuối tệp.
 Sinh viên sẽ thấy một dòng ghi lại việc dừng rsyslogd, và sau đó là một dòng ghi lại rằng rsyslogd đã được khởi động.
 Tiếp tục chờ đợi cho đến khi thấy một bản ghi MARK xuất hiện trong nhật ký. Sau khi sinh viên đã thấy nó (hoặc sau hơn một phút), nhấn Ctrl-C để thoát khỏi tail.
-```bash
+```c
 Oct 24 03:45:09 logger systemd: Stopping System Logging Service...
 Oct 24 03:45:09 logger rsyslogd: [origin software="rsyslogd" swVersion="8.24.0" x-pid="146" x-info="http://www.rsyslog.com"] exiting on signal 15.
 Oct 24 03:45:09 logger systemd: Starting System Logging Service...
