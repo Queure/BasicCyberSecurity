@@ -1,22 +1,25 @@
-Bài thực hành: Khám phá Nhật ký (Log) Unix trên CentOS
-1.	Mục đích
+# Bài thực hành: Khám phá Nhật ký (Log) Unix trên CentOS
+##	Mục đích
 Mục tiêu của bài tập này là để cung cấp cho sinh viên một trải nghiệm thực tế với cấu hình và kiểm thử syslog.
-2.	Yêu cầu đối với sinh viên:
+##	Yêu cầu đối với sinh viên:
 Nắm được kiến thức về CentOS và syslog.
-3.    Nội dung thực hành
+##    Nội dung thực hành
 Chuẩn bị lab
--   	Khởi động lab:
+### Khởi động lab:
 labtainer centos-log2
 (chú ý: sinh viên sử dụng tên tài khoản của mình để nhập thông tin email người thực hiện bài lab khi có yêu cầu trong terminal, để sử dụng khi chấm điểm. Thông thường tên tài khoản của sinh viên chính là Mã sinh viên)
 
-Các nhiệm vụ
-Đăng nhập vào CentOS với tên người dùng Joe và mật khẩu "password4joe".
-Nhiệm vụ 1: Khám phá
+**Các nhiệm vụ**
+
+#### Đăng nhập vào CentOS với tên người dùng Joe và mật khẩu "password4joe".
+
+## Nhiệm vụ 1: Khám phá
 1. Trong terminal, nhập lệnh sudo su nhưng nhập sai mật khẩu cho người dùng root.
 2. Nhập lại lệnh sudo su, nhưng lần này nhập đúng mật khẩu cho root. Nếu làm đúng, dấu nhắc sẽ kết thúc bằng ký tự '#'.
 3. Khám phá thư mục log
    - Thay đổi thư mục làm việc hiện tại thành /var/log.
    - Liệt kê nội dung của /var/log.
+```bash
 drwxr-xr-x 2 root root   4096 Mar  2  2018 anaconda
 -rw------- 1 root utmp      0 Mar  8  2018 btmp
 -rw-r--r-- 1 root root    193 Mar  2  2018 grubby_prune_debug
@@ -29,6 +32,7 @@ drwxr-xr-x 2 root root   4096 Mar  2  2018 rhsm
 -rw------- 1 root root      0 Mar  2  2018 tallylog
 -rw-rw-r-- 1 root utmp   1536 Oct 24 02:50 wtmp
 -rw------- 1 root root   9660 Jan 24  2020 yum.log
+```
 •	Sinh viên sẽ thấy nhiều tệp và thư mục khác nhau. Lưu ý rằng tên màu xanh đề cập đến thư mục. Sinh viên có thể thấy một số "phần mở rộng" (extensions) khác nhau trên các tệp:
      + .old: Đây là bản sao "xoay vòng" (rotated) của nhật ký. Sinh viên sẽ thấy một tệp khác có cùng tiền tố, nhưng không có phần mở rộng ".old".
      + -yyyymmdd: Đây là một ví dụ khác về nhật ký "xoay vòng" (rotated) nhưng có một phần mở rộng hữu ích hơn: ngày mà nó đã được xoay vòng. Nếu sinh viên thấy phần mở rộng này, thì sinh viên cũng sẽ thấy một tệp khác có cùng tiền tố, nhưng không có phần mở rộng về ngày tháng.
@@ -39,19 +43,26 @@ drwxr-xr-x 2 root root   4096 Mar  2  2018 rhsm
    - Các bản ghi liên quan đến đăng nhập được lưu trong tệp văn bản có tên là secure. Các bản ghi mới nhất được ghi vào cuối tệp.
    - Mở tệp và tìm kiếm trạng thái failed khi cố gắng đăng nhập bằng tên người dùng Joe (không phải sự thất bại khi 'su' thành root).
    - Trong Mục số #2 của báo cáo, ghi lại cụm từ được sử dụng để chỉ ra sự thất bại trong việc đăng nhập.
+```bash
 Oct 24 03:04:06 logger login[1197]: pam_unix(login:auth): authentication failure; logname= uid=0 euid=0 tty=/dev/pts/2 ruser= rhost=
 Oct 24 03:04:08 logger login[1197]: FAILED LOGIN (1) on '/dev/pts/2' FOR 'UNKNOWN', Authentication failure
+```
    - Lưu ý rằng Mục số #3 cần trả lời các câu hỏi bổ sung.
+
 5. Mật khẩu là tên người dùng
    - Với tệp nhật ký secure vẫn mở, tìm dòng ghi chú cho biết sinh viên đã nhập "password" làm tên người dùng.
    - Trong Mục số #4 của báo cáo, ghi lại cụm từ được sử dụng khi bạn nhập một tên người dùng không hợp lệ.
+```bash
 Oct 24 03:04:13 logger login[1197]: pam_unix(login:auth): authentication failure; logname= uid=0 euid=0 tty=/dev/pts/2 ruser= rhost=  user=Joe
 Oct 24 03:04:14 logger login[1197]: FAILED LOGIN (2) on '/dev/pts/2' FOR 'Joe', Authentication failure
+```
 6. Sử dụng su
    - Với tệp nhật ký secure vẫn mở, tìm mục ở cuối tệp liên quan đến hành động su thành root trước đó. Xem thông tin được lưu trữ về sử dụng su.
    - Trong Mục số #5 của báo cáo, ghi lại thông tin đã được ghi lại về sử dụng su   
+```c
 Oct 24 03:04:45 logger sudo:     Joe : TTY=pts/2 ; PWD=/home/Joe ; USER=root ; COMMAND=/usr/bin/su
 Oct 24 03:04:45 logger su: pam_unix(su:session): session opened for user root by Joe(uid=0)
+```
    - Thoát khỏi trình soạn thảo khi sinh viên đã hoàn thành.
 7. Tệp wtmp
    - Một trong số các tệp nhị phân trong thư mục nhật ký là tệp wtmp phổ biến, yêu cầu sử dụng các công cụ khác để trích xuất thông tin từ nó, chẳng hạn như lệnh last.
@@ -60,14 +71,26 @@ man last
    - Đọc phần DESCRIPTION để tìm hiểu chức năng của lệnh.
    - Điều hướng đến phần OPTIONS.
    - Trong Mục số #6 của báo cáo tự mô tả và giải thích lựa chọn –t của lệnh last.
-Nhiệm vụ 2: Cấu hình lại rsyslog cho MARK
+```c
+[root@logger log]# last -F
+root     pts/1                         Tue Oct 24 02:50:34 2023 - Tue Oct 24 02:50:34 2023  (00:00)    
+root     pts/1                         Tue Oct 24 02:50:34 2023 - Tue Oct 24 02:50:34 2023  (00:00)
+
+wtmp begins Tue Oct 24 02:50:34 2023
+[root@logger log]# last -t 20231024025034
+root     pts/1                         Tue Oct 24 02:50 - 02:50  (00:00)    
+root     pts/1                         Tue Oct 24 02:50 - 02:50  (00:00)    
+
+wtmp begins Tue Oct 24 02:50:34 2023
+```
+## Nhiệm vụ 2: Cấu hình lại rsyslog cho MARK
 Trong phần này, sinh viên sẽ bật tính năng MARK và khởi động lại syslog để chấp nhận thay đổi.
 1. Mở tệp cấu hình rsyslog.
 Trong khi vẫn chạy với đặc quyền root trong terminal, khởi chạy một trình soạn thảo từ dòng lệnh (như leafpad) để mở tệp /etc/rsyslog.conf
 Lưu ý: khi tiến trình rsyslog đọc tệp này trong quá trình khởi tạo, bất cứ điều gì sau ký tự '#' (từ đó đến cuối dòng) được xem như một chú thích.
 2. Bật tính năng Mark.
 Mặc định, việc chèn thời gian vào một tần suất đã chỉ định được vô hiệu hóa.
-- Trong phần "### MODULES ###", tìm dòng có $ModLoad immark, và xóa ‘#’ để kích hoạt tính năng này.
+- Trong phần `"### MODULES ###"`, tìm dòng có $ModLoad immark, và xóa ‘#’ để kích hoạt tính năng này.
 - Thiết lập tần suất của timestamps với việc thêm dòng tiếp theo dòng bên trên vừa mới thêm vào:
 $MarkMessagePeriod 60
 	“60” là số giây giữa các timestamps (giá trị mặc định thường là 20 phút)
@@ -80,8 +103,16 @@ Khởi động lại tiến trình rsyslog sẽ khiến nó khởi tạo lại v
 Lệnh tail hiển thị một số dòng cuối cùng của tệp (khác với lệnh head, hiển thị một số dòng đầu tiên của tệp). Tùy chọn "-f" cho biết để chờ đợi “mãi mãi” và hiển thị thêm dòng khi chúng được thêm vào cuối tệp.
 Sinh viên sẽ thấy một dòng ghi lại việc dừng rsyslogd, và sau đó là một dòng ghi lại rằng rsyslogd đã được khởi động.
 Tiếp tục chờ đợi cho đến khi thấy một bản ghi MARK xuất hiện trong nhật ký. Sau khi sinh viên đã thấy nó (hoặc sau hơn một phút), nhấn Ctrl-C để thoát khỏi tail.
+```bash
+Oct 24 03:45:09 logger systemd: Stopping System Logging Service...
+Oct 24 03:45:09 logger rsyslogd: [origin software="rsyslogd" swVersion="8.24.0" x-pid="146" x-info="http://www.rsyslog.com"] exiting on signal 15.
+Oct 24 03:45:09 logger systemd: Starting System Logging Service...
+Oct 24 03:45:09 logger rsyslogd: [origin software="rsyslogd" swVersion="8.24.0" x-pid="1983" x-info="http://www.rsyslog.com"] start
+Oct 24 03:45:09 logger systemd: Started System Logging Service.
+Oct 24 03:46:09 logger rsyslogd: -- MARK --
+```
 
-Nhiệm vụ 3: Cấu hình lại và Kiểm tra rsyslog
+## Nhiệm vụ 3: Cấu hình lại và Kiểm tra rsyslog
 Trong phần này, sinh viên sẽ làm quen với tiện ích logger để tạo thủ công các mục syslog. Một quản trị viên hệ thống có thể sử dụng lệnh này để ghi lại các thay đổi mà họ thực hiện trên hệ thống, và nó có thể được sử dụng để kiểm tra các thay đổi trong cấu hình syslog. Sinh viên sẽ thực hiện một số thay đổi trong các quy tắc syslog, sau đó sử dụng logger để kiểm tra các thay đổi đó.
 1. Đọc phần DESCRIPTION trong trang man của tiện ích logger:
 man logger
@@ -131,7 +162,9 @@ Tham khảo /etc/rsyslog.conf, trả lời các câu hỏi trong các mục #11 
 2. Mô tả hành động và kết quả trong Mục số #14 của báo cáo.
 3. Trong Mục #15 của báo cáo hãy mô tả những điều sinh viên đã học từ bài thực hành này.
 14. Trong Mục #16 của báo cáo hãy mô tả bất kỳ đề xuất nào có để cải thiện bài thực hành này.
-Kết thúc bài lab:
+
+
+# Kết thúc bài lab:
 -   	Trên terminal đầu tiên sử dụng câu lệnh sau để kết thúc bài lab:
 stoplab
 -   	Khi bài lab kết thúc, một tệp zip lưu kết quả được tạo và lưu vào một vị trí được hiển thị bên dưới lệnh stoplab.
